@@ -1,0 +1,20 @@
+# Go
+backend/bin/
+backend/uploads/
+backend/exports/
+*.exe
+
+# Node / Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+sample-data/
+TESTING.md
+# Env
+.env
+*.local
+
+# OS
+.DS_Store
+Thumbs.db
