@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: automation-postgres
+    environment:
+      POSTGRES_USER: automation
+      POSTGRES_PASSWORD: automation_dev
+      POSTGRES_DB: automation
+    ports:
+      # Host port 5434: 5432 is a locally installed PostgreSQL, 5433 is another
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U automation"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
