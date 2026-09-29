@@ -1,0 +1,378 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* shadcn-style design tokens — zinc, light + dark */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 142 76% 36%;
+    --warning: 38 92% 50%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --excel: 155 68% 27%; /* Excel brand green #16794C-ish */
+
+    /* Chart ink. Runs are plotted blue (the quantity) with failures in status
+       red — a validated CVD-safe pair; red/green would collide for deutan
+       readers. Both are also carried by the legend, position and labels. */
+    --chart-runs: #2a78d6;
+    --chart-failed: #d03b3b;
+    --chart-grid: 240 5.9% 90%;
+
+    /* Page plane sits a hair below cards so surfaces read as layers */
+    --plane: 240 20% 98%;
+    color-scheme: light;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 8% 6%;
+    --card-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --excel: 152 55% 42%; /* brighter green for dark surfaces */
+
+    /* Same two hues, stepped for the dark surface and re-validated there */
+    --chart-runs: #3987e5;
+    --chart-failed: #d03b3b;
+    --chart-grid: 240 3.7% 14%;
+
+    --plane: 240 10% 3.2%;
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans text-sm;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-secondary;
+    border: 2px solid hsl(var(--background));
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
+    height: 2.25rem;
+    padding: 0 1rem;
+  }
+  .btn svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
+  .btn-primary {
+    @apply bg-primary text-primary-foreground shadow hover:bg-primary/90;
+  }
+  .btn-outline {
+    @apply border border-border bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground;
+  }
+  .btn-ghost {
+    @apply hover:bg-accent hover:text-accent-foreground;
+  }
+  .btn-destructive {
+    @apply border border-red-300 bg-transparent text-red-600 shadow-sm hover:bg-red-50 dark:border-red-900/50 dark:text-red-400 dark:hover:border-red-800 dark:hover:bg-red-950/40;
+  }
+  .btn-sm {
+    height: 2rem;
+    padding: 0 0.75rem;
+    @apply text-xs;
+  }
+  .btn-sm svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  .btn-icon {
+    width: 2rem;
+    padding: 0;
+  }
+
+  /* Form controls */
+  .label {
+    @apply mb-1.5 block text-xs font-medium text-muted-foreground;
+  }
+  .input {
+    @apply flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  textarea.input {
+    @apply h-auto;
+  }
+  .select {
+    @apply input cursor-pointer appearance-none pr-8;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.625rem center;
+  }
+  .select option {
+    @apply bg-card text-foreground;
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-lg border border-border bg-card text-card-foreground shadow-sm;
+  }
+
+  /* Tables */
+  .table-shell {
+    @apply overflow-auto rounded-lg border border-border bg-card;
+  }
+  .table-shell table {
+    @apply w-full caption-bottom text-sm;
+  }
+  .table-shell th {
+    @apply sticky top-0 z-[1] h-10 whitespace-nowrap bg-card px-4 text-left align-middle text-2xs font-medium uppercase tracking-wider text-muted-foreground;
+    box-shadow: inset 0 -1px 0 hsl(var(--border));
+  }
+  .table-shell td {
+    @apply whitespace-nowrap border-t border-border px-4 py-2.5 align-middle;
+  }
+  .table-shell tbody tr {
+    @apply transition-colors hover:bg-accent/40;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-transparent px-2.5 py-0.5 text-xs font-medium;
+  }
+  .badge .dot {
+    @apply h-1.5 w-1.5 rounded-full;
+  }
+  .badge-success {
+    @apply border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/50 dark:text-emerald-400;
+  }
+  .badge-success .dot {
+    @apply bg-emerald-600 dark:bg-emerald-400;
+  }
+  .badge-failed,
+  .badge-error {
+    @apply border-red-300 bg-red-50 text-red-700 dark:border-red-900/60 dark:bg-red-950/50 dark:text-red-400;
+  }
+  .badge-failed .dot,
+  .badge-error .dot {
+    @apply bg-red-600 dark:bg-red-400;
+  }
+  .badge-running {
+    @apply border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/50 dark:text-amber-400;
+  }
+  .badge-running .dot {
+    @apply animate-pulse bg-amber-600 dark:bg-amber-400;
+  }
+  .badge-info,
+  .badge-workflow {
+    @apply border-blue-300 bg-blue-50 text-blue-700 dark:border-blue-900/60 dark:bg-blue-950/50 dark:text-blue-400;
+  }
+  .badge-info .dot,
+  .badge-workflow .dot {
+    @apply bg-blue-600 dark:bg-blue-400;
+  }
+  .badge-neutral {
+    @apply border-border bg-secondary/60 text-muted-foreground;
+  }
+  .badge-neutral .dot {
+    @apply bg-muted-foreground;
+  }
+
+  /* Page scaffolding */
+  .page {
+    @apply mx-auto w-full max-w-6xl px-4 py-6 sm:px-8 sm:py-8;
+  }
+  .page-title {
+    @apply text-xl font-semibold tracking-tight;
+  }
+  .page-sub {
+    @apply mt-1 text-sm text-muted-foreground;
+  }
+
+  .empty-state {
+    @apply flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border px-6 py-14 text-center text-sm text-muted-foreground;
+  }
+
+  /* Stat tiles — label · value · delta, optionally a sparkline.
+     Values use proportional figures; only table/axis columns get tabular. */
+  .stat {
+    @apply card relative overflow-hidden p-5;
+  }
+  .stat-label {
+    @apply flex items-center gap-2 text-xs font-medium text-muted-foreground;
+  }
+  .stat-value {
+    @apply mt-2 text-[28px] font-semibold leading-none tracking-tight;
+  }
+  .stat-foot {
+    @apply mt-2.5 flex items-center gap-1.5 text-xs text-muted-foreground;
+  }
+  .stat-delta {
+    @apply inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-2xs font-semibold;
+  }
+  .stat-delta-up {
+    @apply bg-emerald-500/10 text-emerald-700 dark:text-emerald-400;
+  }
+  .stat-delta-down {
+    @apply bg-red-500/10 text-red-700 dark:text-red-400;
+  }
+  .stat-delta-flat {
+    @apply bg-secondary text-muted-foreground;
+  }
+
+  /* Meter — a single ratio against its limit; track is a lighter step of the fill */
+  .meter {
+    @apply h-1.5 w-full overflow-hidden rounded-full;
+    background: hsl(var(--section, var(--muted-foreground)) / 0.15);
+  }
+  .meter-fill {
+    @apply h-full rounded-full transition-[width] duration-500;
+    background: hsl(var(--section, var(--foreground)));
+  }
+
+  /* Card header row shared by every panel */
+  .card-head {
+    @apply flex items-center justify-between gap-3 border-b border-border px-5 py-3.5;
+  }
+  .card-title {
+    @apply text-sm font-semibold;
+  }
+
+  /* Small neutral chip for inline metadata (trigger source, format, …) */
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-md border border-border bg-secondary/50 px-1.5 py-0.5 text-2xs font-medium capitalize text-muted-foreground;
+  }
+
+  /* Filter row — one row above the content it scopes */
+  .filter-chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-border bg-transparent px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground;
+  }
+  .filter-chip-on {
+    @apply border-transparent bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground;
+  }
+  .filter-count {
+    @apply rounded-full bg-foreground/10 px-1.5 text-2xs font-semibold tabular-nums;
+  }
+  .filter-chip-on .filter-count {
+    @apply bg-primary-foreground/20;
+  }
+
+  /* Chart chrome */
+  .chart-grid-line {
+    stroke: hsl(var(--chart-grid));
+    stroke-width: 1;
+  }
+  .chart-tick {
+    @apply fill-muted-foreground text-[10px];
+    font-variant-numeric: tabular-nums;
+  }
+  .legend-key {
+    @apply inline-flex items-center gap-1.5 text-xs text-muted-foreground;
+  }
+  .legend-swatch {
+    @apply h-2.5 w-2.5 shrink-0 rounded-sm;
+  }
+
+  /* Auth screens */
+  .auth-bg {
+    background-image: radial-gradient(500px 280px at 50% 0%, hsl(240 20% 60% / 0.15), transparent);
+  }
+  .dark .auth-bg {
+    background-image: radial-gradient(500px 280px at 50% 0%, hsl(240 30% 20% / 0.35), transparent);
+  }
+
+  /* Status text helpers (theme-aware) */
+  .text-ok {
+    @apply text-emerald-600 dark:text-emerald-400;
+  }
+  .text-err {
+    @apply text-red-600 dark:text-red-400;
+  }
+
+  /* Section identity — each area of the app has its own accent color */
+  .section-dashboard {
+    --section: 262 83% 58%; /* violet */
+  }
+  .section-datasets {
+    --section: var(--excel); /* Excel green */
+  }
+  .section-workflows {
+    --section: 221 83% 53%; /* blue */
+  }
+  .section-executions {
+    --section: 32 95% 44%; /* amber */
+  }
+  .section-users {
+    --section: 347 77% 50%; /* rose */
+  }
+  .dark .section-dashboard {
+    --section: 258 90% 66%;
+  }
+  .dark .section-workflows {
+    --section: 217 91% 60%;
+  }
+  .dark .section-executions {
+    --section: 38 92% 50%;
+  }
+  .dark .section-users {
+    --section: 350 89% 60%;
+  }
+
+  /* Colored page hero strip (like the Excel-green dataset header) */
+  .section-hero {
+    @apply -mx-4 mb-6 px-4 pb-5 pt-6 sm:-mx-8 sm:px-8;
+    border-bottom: 1px solid hsl(var(--section) / 0.2);
+    background: linear-gradient(to bottom, hsl(var(--section) / 0.12), transparent);
+  }
+  .section-tile {
+    @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white shadow-sm;
+    background: hsl(var(--section));
+  }
+
+  /* Sidebar: icons carry the section color; active item gets a soft tint */
+  .nav-item svg {
+    color: hsl(var(--section, var(--muted-foreground)));
+  }
+  .nav-item.nav-active {
+    background: hsl(var(--section, var(--accent)) / 0.12);
+  }
+}
