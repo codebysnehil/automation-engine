@@ -1,4 +1,6 @@
-# ⚡ AutomationHub
+# AutomationHub
+
+<img width="1582" height="937" alt="image" src="https://github.com/user-attachments/assets/efa1f180-fa49-48c9-8452-5748e83a4d40" />
 
 A full-stack, production-grade automation platform: upload Excel/CSV data, get it parsed into
 structured, typed datasets, then automate everything around it with workflows — scheduled jobs,
