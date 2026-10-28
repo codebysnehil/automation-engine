@@ -44,8 +44,11 @@ func main() {
 	}
 
 	r := router.New(server)
-	log.Printf("AutomationHub API listening on :%s", cfg.Port)
-	if err := r.Run(":" + cfg.Port); err != nil {
+
+	addr := "0.0.0.0:" + cfg.Port
+	log.Printf("PORT=%q; starting server on %s", cfg.Port, addr)
+
+	if err := r.Run(addr); err != nil {
 		log.Fatalf("server stopped: %v", err)
 	}
 }
